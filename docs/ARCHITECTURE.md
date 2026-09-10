@@ -33,8 +33,9 @@
 ```
 src/
 ├── shared/
+│   ├── types.ts              # Universal primitives and generic types
 │   ├── security.ts           # Prototype pollution defense, safe object creation
-│   └── security.test.ts      # Unit tests for security primitives
+│   └── security.test.ts      # Unit & penetration tests for security guards
 ├── url-parser/               # WHATWG-compliant URL component breakdown
 │   ├── index.ts
 │   └── index.test.ts
@@ -59,11 +60,9 @@ src/
 ├── hex/                      # Hexadecimal byte & string manipulation
 │   ├── index.ts
 │   └── index.test.ts
-├── cli/                      # Standalone CLI binary and alias dispatchers
-│   ├── args.ts               # Zero-dependency command-line flag parser
-│   ├── io.ts                 # Stdin streaming and file I/O resolver
-│   ├── dispatcher.ts         # Central command router & formatting
-│   └── index.ts              # Executable entrypoint with shebang
+├── bin/                      # Standalone CLI binary and integration test suite
+│   ├── cli.ts                # Executable command runner & argument parser
+│   └── cli.test.ts           # CLI integration test suite
 ├── index.ts                  # Root library entrypoint (namespaces + named exports)
 └── index.test.ts             # Root export integrity tests
 ```
@@ -98,14 +97,14 @@ src/
 [User Terminal / Shell]
        │
        ▼
-[dist/cli/index.cjs]
+[dist/bin/cli.cjs]
        │
        ├── Detect Binary Alias (`process.argv[1]`: url-parse, b64, hex-convert, etc.)
-       ├── Parse Flags & Positional Arguments (`src/cli/args.ts`)
-       ├── Resolve Input (`src/cli/io.ts`: Stdin pipe, file path, or direct argument)
+       ├── Parse Flags & Positional Arguments
+       ├── Resolve Input (Stdin pipe, file path, or direct argument)
        │
        ▼
-[src/cli/dispatcher.ts]
+[src/bin/cli.ts Execution Engine]
        │
        ├── Success: stdout output + exit code 0
        ├── Operation / Validation Failure: stderr message + exit code 1

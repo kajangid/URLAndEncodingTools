@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { parseUrl } from '../url-parser/index.js';
 import { parse as parseQs, stringify as stringifyQs, ArrayFormat } from '../query-string/index.js';
 import { validate as validateUrl } from '../url-validator/index.js';
@@ -30,10 +33,13 @@ import {
   format as hexFormat,
   isHex,
 } from '../hex/index.js';
-import { ParsedArgs } from './args.js';
-import { resolveInput } from './io.js';
 
 export const VERSION = '0.1.0';
+
+export interface ParsedArgs {
+  positionals: string[];
+  flags: Record<string, string | boolean>;
+}
 
 export interface CliResult {
   exitCode: number;
@@ -102,6 +108,135 @@ General Flags:
   -v, --version               Show version number
 `;
 
+/**
+ * Minimalist zero-dependency argument & flag parser.
+ */
+export function parseArgs(rawArgs: string[]): ParsedArgs {
+  const positionals: string[] = [];
+  const flags: Record<string, string | boolean> = Object.create(null);
+
+  let i = 0;
+  while (i < rawArgs.length) {
+    const arg = rawArgs[i]!;
+
+    if (arg === '--') {
+      positionals.push(...rawArgs.slice(i + 1));
+      break;
+    }
+
+    if (arg.startsWith('--')) {
+      const eqIdx = arg.indexOf('=');
+      if (eqIdx !== -1) {
+        flags[arg.slice(2, eqIdx)] = arg.slice(eqIdx + 1);
+      } else {
+        const key = arg.slice(2);
+        const next = rawArgs[i + 1];
+        if (next && !next.startsWith('-')) {
+          flags[key] = next;
+          i++;
+        } else {
+          flags[key] = true;
+        }
+      }
+    } else if (arg.startsWith('-') && arg.length > 1) {
+      const key = arg.slice(1);
+      if (key === 'h' || key === 'v') {
+        flags[key] = true;
+      } else {
+        const next = rawArgs[i + 1];
+        if (next && !next.startsWith('-')) {
+          flags[key] = next;
+          i++;
+        } else {
+          flags[key] = true;
+        }
+      }
+    } else {
+      positionals.push(arg);
+    }
+    i++;
+  }
+
+  return { positionals, flags };
+}
+
+/**
+ * Reads process.stdin if piped.
+ */
+export async function readStdin(timeoutMs = 1500): Promise<string> {
+  return new Promise((resolve) => {
+    let data = '';
+    let timer: NodeJS.Timeout | null = null;
+
+    const cleanup = () => {
+      if (timer) clearTimeout(timer);
+      process.stdin.removeListener('data', onData);
+      process.stdin.removeListener('end', onEnd);
+      process.stdin.removeListener('error', onError);
+    };
+
+    const onData = (chunk: string | Buffer) => {
+      data += chunk.toString();
+    };
+
+    const onEnd = () => {
+      cleanup();
+      resolve(data);
+    };
+
+    const onError = () => {
+      cleanup();
+      resolve(data);
+    };
+
+    timer = setTimeout(() => {
+      cleanup();
+      resolve(data);
+    }, timeoutMs);
+
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('data', onData);
+    process.stdin.on('end', onEnd);
+    process.stdin.on('error', onError);
+
+    if (process.stdin.readableEnded) {
+      cleanup();
+      resolve(data);
+    }
+  });
+}
+
+/**
+ * Resolves input from arguments, files, or stdin piping.
+ */
+export async function resolveInput(positionalArg?: string): Promise<string> {
+  if (positionalArg !== undefined && positionalArg !== '') {
+    try {
+      if (fs.existsSync(positionalArg)) {
+        const stat = fs.statSync(positionalArg);
+        if (stat.isFile()) {
+          return fs.readFileSync(positionalArg, 'utf8');
+        }
+      }
+    } catch {
+      // Fallback to literal positional argument
+    }
+    return positionalArg;
+  }
+
+  if (!process.stdin.isTTY && !process.env.VITEST) {
+    const stdinContent = await readStdin();
+    if (stdinContent.length > 0) {
+      return stdinContent.replace(/\r?\n$/, '');
+    }
+  }
+
+  return '';
+}
+
+/**
+ * CLI command execution dispatcher.
+ */
 export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise<CliResult> {
   const { flags } = args;
 
@@ -127,7 +262,6 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
     };
   }
 
-  // Normalize command name
   const normalizedCmd = cmd.toLowerCase().replace(/_/g, '-');
 
   switch (normalizedCmd) {
@@ -158,7 +292,7 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
       let inputArg = positionals[1];
       if (sub !== 'parse' && sub !== 'stringify') {
         inputArg = sub;
-        sub = 'parse'; // default subcommand
+        sub = 'parse';
       }
       const raw = await resolveInput(inputArg);
       const delimiter = typeof flags['delimiter'] === 'string' ? flags['delimiter'] : undefined;
@@ -167,7 +301,6 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
         const res = parseQs(raw, { delimiter });
         return { exitCode: 0, stdout: JSON.stringify(res, null, 2) };
       } else {
-        // stringify
         try {
           const parsedJson = JSON.parse(raw);
           const arrayFormat = (flags['array-format'] as ArrayFormat) || 'none';
@@ -265,7 +398,7 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
       let inputArg = positionals[1];
       if (sub !== 'encode' && sub !== 'decode' && sub !== 'check') {
         inputArg = sub;
-        sub = 'encode'; // default
+        sub = 'encode';
       }
       const raw = await resolveInput(inputArg);
       const isUrlSafe = Boolean(flags['url']);
@@ -311,7 +444,6 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
         }
         return { exitCode: 0, stdout: encodeComponent(raw) };
       } else {
-        // decode
         try {
           const out = flags['full'] ? decodeFull(raw) : decodeComponent(raw);
           return { exitCode: 0, stdout: out };
@@ -380,4 +512,40 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
         stderr: `Error: Unknown command "${cmd}". Run with --help to see available commands.`,
       };
   }
+}
+
+// Main execution entry when run directly in Node
+const rawBin = path.basename(process.argv[1] || '');
+const binName = rawBin.replace(/\.(c?js|cmd|ps1|sh)$/i, '');
+
+const ALIAS_MAP: Record<string, string> = {
+  'url-parse': 'url-parser',
+  'query-string': 'query-string',
+  'url-validate': 'url-validator',
+  'utm-build': 'utm-builder',
+  'b64': 'base64',
+  'url-encode': 'url-encoder',
+  'html-encode': 'html-encoder',
+  'hex-convert': 'hex',
+};
+
+const defaultCmd = ALIAS_MAP[binName];
+const parsed = parseArgs(process.argv.slice(2));
+
+// Only run automatically if executed directly as a script
+if (process.argv[1] && (process.argv[1].endsWith('cli.cjs') || process.argv[1].endsWith('cli.mjs') || process.argv[1].endsWith('cli.ts') || process.argv[1].endsWith('cli.js'))) {
+  runCli(parsed, defaultCmd)
+    .then((result) => {
+      if (result.stdout) {
+        process.stdout.write(`${result.stdout}\n`);
+      }
+      if (result.stderr) {
+        process.stderr.write(`${result.stderr}\n`);
+      }
+      process.exit(result.exitCode);
+    })
+    .catch((err) => {
+      process.stderr.write(`Fatal Error: ${(err as Error).message}\n`);
+      process.exit(1);
+    });
 }

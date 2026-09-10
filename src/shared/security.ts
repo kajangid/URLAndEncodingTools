@@ -3,6 +3,8 @@
  * prototype poisoning, and boundary checking.
  */
 
+import type { SafeRecord } from './types.js';
+
 export const DANGEROUS_KEYS = Object.freeze(new Set(['__proto__', 'constructor', 'prototype']));
 
 /**
@@ -16,7 +18,7 @@ export function isPrototypePollutionKey(key: string): boolean {
  * Creates a prototype-free object (dictionary) that cannot be polluted
  * via Object.prototype inheritance.
  */
-export function createSafeObject<T = unknown>(): Record<string, T> {
+export function createSafeObject<T = unknown>(): SafeRecord<T> {
   return Object.create(null);
 }
 

@@ -10,7 +10,7 @@ const entries = [
   'src/url-encoder/index.ts',
   'src/html-encoder/index.ts',
   'src/hex/index.ts',
-  'src/cli/index.ts',
+  'src/bin/cli.ts',
 ];
 
 export default defineConfig({

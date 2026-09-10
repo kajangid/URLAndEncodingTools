@@ -15,6 +15,7 @@ export * as urlEncoder from './url-encoder/index.js';
 export * as htmlEncoder from './html-encoder/index.js';
 export * as hex from './hex/index.js';
 export * as security from './shared/security.js';
+export * from './shared/types.js';
 
 // Direct named exports for distinct APIs
 export { parseUrl, tryParseUrl, toUrlString } from './url-parser/index.js';

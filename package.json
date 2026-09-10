@@ -8,16 +8,16 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
-    "url-tools": "dist/cli/index.cjs",
-    "omnidev": "dist/cli/index.cjs",
-    "url-parse": "dist/cli/index.cjs",
-    "query-string": "dist/cli/index.cjs",
-    "url-validate": "dist/cli/index.cjs",
-    "utm-build": "dist/cli/index.cjs",
-    "b64": "dist/cli/index.cjs",
-    "url-encode": "dist/cli/index.cjs",
-    "html-encode": "dist/cli/index.cjs",
-    "hex-convert": "dist/cli/index.cjs"
+    "url-tools": "./dist/bin/cli.cjs",
+    "omnidev": "./dist/bin/cli.cjs",
+    "url-parse": "./dist/bin/cli.cjs",
+    "query-string": "./dist/bin/cli.cjs",
+    "url-validate": "./dist/bin/cli.cjs",
+    "utm-build": "./dist/bin/cli.cjs",
+    "b64": "./dist/bin/cli.cjs",
+    "url-encode": "./dist/bin/cli.cjs",
+    "html-encode": "./dist/bin/cli.cjs",
+    "hex-convert": "./dist/bin/cli.cjs"
   },
   "exports": {
     ".": {
