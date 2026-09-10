@@ -1,0 +1,113 @@
+{
+  "name": "@omnidev-tools/url-and-encoding",
+  "version": "0.1.0",
+  "description": "Production-grade, zero-runtime-dependency TypeScript URL manipulation, validation, encoding, and decoding toolkit with standalone CLI.",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "url-tools": "dist/cli/index.cjs",
+    "omnidev": "dist/cli/index.cjs",
+    "url-parse": "dist/cli/index.cjs",
+    "query-string": "dist/cli/index.cjs",
+    "url-validate": "dist/cli/index.cjs",
+    "utm-build": "dist/cli/index.cjs",
+    "b64": "dist/cli/index.cjs",
+    "url-encode": "dist/cli/index.cjs",
+    "html-encode": "dist/cli/index.cjs",
+    "hex-convert": "dist/cli/index.cjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./url-parser": {
+      "types": "./dist/url-parser/index.d.ts",
+      "import": "./dist/url-parser/index.mjs",
+      "require": "./dist/url-parser/index.cjs"
+    },
+    "./query-string": {
+      "types": "./dist/query-string/index.d.ts",
+      "import": "./dist/query-string/index.mjs",
+      "require": "./dist/query-string/index.cjs"
+    },
+    "./url-validator": {
+      "types": "./dist/url-validator/index.d.ts",
+      "import": "./dist/url-validator/index.mjs",
+      "require": "./dist/url-validator/index.cjs"
+    },
+    "./utm-builder": {
+      "types": "./dist/utm-builder/index.d.ts",
+      "import": "./dist/utm-builder/index.mjs",
+      "require": "./dist/utm-builder/index.cjs"
+    },
+    "./base64": {
+      "types": "./dist/base64/index.d.ts",
+      "import": "./dist/base64/index.mjs",
+      "require": "./dist/base64/index.cjs"
+    },
+    "./url-encoder": {
+      "types": "./dist/url-encoder/index.d.ts",
+      "import": "./dist/url-encoder/index.mjs",
+      "require": "./dist/url-encoder/index.cjs"
+    },
+    "./html-encoder": {
+      "types": "./dist/html-encoder/index.d.ts",
+      "import": "./dist/html-encoder/index.mjs",
+      "require": "./dist/html-encoder/index.cjs"
+    },
+    "./hex": {
+      "types": "./dist/hex/index.d.ts",
+      "import": "./dist/hex/index.mjs",
+      "require": "./dist/hex/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "bump:patch": "npm version patch",
+    "bump:minor": "npm version minor",
+    "bump:major": "npm version major",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build",
+    "publish:dry": "npm publish --dry-run"
+  },
+  "keywords": [
+    "utility",
+    "url",
+    "parser",
+    "base64",
+    "hex",
+    "query-string",
+    "utm",
+    "encoder",
+    "html-encoder",
+    "developer-tools",
+    "cli"
+  ],
+  "author": "OmniDev Tools Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
