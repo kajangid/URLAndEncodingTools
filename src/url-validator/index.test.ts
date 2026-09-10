@@ -48,7 +48,7 @@ describe('url-validator', () => {
     if (!r.valid) expect(r.error.code).toBe('INVALID_HOST');
   });
 
-  it('rejects hosts not in allow-list', () => {
+  it('rejects hosts not in the allow-list', () => {
     const r = validate('https://evil.com/', { allowedHosts: ['example.com'] });
     expect(r.valid).toBe(false);
     if (!r.valid) expect(r.error.code).toBe('INVALID_HOST');
@@ -60,7 +60,7 @@ describe('url-validator', () => {
     if (!r.valid) expect(r.error.code).toBe('INVALID_HOST');
   });
 
-  it('accepts IPv4 host when ipOnly is set', () => {
+  it('accepts an IPv4 host when ipOnly is set', () => {
     const r = validate('https://192.168.1.1/', { ipOnly: true });
     expect(r.valid).toBe(true);
   });
@@ -71,8 +71,11 @@ describe('url-validator', () => {
     if (!r.valid) expect(r.error.code).toBe('INVALID_PORT');
   });
 
-  it('isValidUrl returns boolean correctly', () => {
+  it('isValidUrl returns true for a valid URL', () => {
     expect(isValidUrl('https://example.com/')).toBe(true);
+  });
+
+  it('isValidUrl returns false for garbage', () => {
     expect(isValidUrl('garbage')).toBe(false);
   });
 });

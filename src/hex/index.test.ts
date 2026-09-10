@@ -1,36 +1,58 @@
 import { describe, it, expect } from 'vitest';
 import { encode, decode, decodeLossy, encodeBytes, decodeBytes, isHex, format } from './index.js';
 
-describe('hex', () => {
-  it('encodes and decodes text round-trip', () => {
+describe('encode / decode (text)', () => {
+  it('round-trips ASCII', () => {
     expect(decode(encode('Hello'))).toBe('Hello');
-    expect(decodeLossy(encode('Hello'))).toBe('Hello');
-    expect(decode(encode('你好'))).toBe('你好');
   });
 
-  it('encodeBytes pads with leading zeroes', () => {
+  it('round-trips UTF-8', () => {
+    const s = '你好';
+    expect(decode(encode(s))).toBe(s);
+  });
+
+  it('lossy decode works', () => {
+    expect(decodeLossy(encode('Hello'))).toBe('Hello');
+  });
+
+  it('encodes bytes 0-15 with leading zero', () => {
     expect(encodeBytes(new Uint8Array([0, 1, 15]))).toBe('00010f');
   });
+});
 
-  it('decodeBytes decodes hex strings with prefixes and spaces', () => {
+describe('decodeBytes', () => {
+  it('decodes to bytes', () => {
     expect(Array.from(decodeBytes('deadbeef'))).toEqual([0xde, 0xad, 0xbe, 0xef]);
+  });
+
+  it('handles 0x prefix', () => {
     expect(Array.from(decodeBytes('0xdeadbeef'))).toEqual([0xde, 0xad, 0xbe, 0xef]);
+  });
+
+  it('handles whitespace', () => {
     expect(Array.from(decodeBytes('de ad be ef'))).toEqual([0xde, 0xad, 0xbe, 0xef]);
   });
 
-  it('throws on odd-length input', () => {
+  it('throws on odd length', () => {
     expect(() => decodeBytes('abc')).toThrow();
   });
+});
 
-  it('isHex validates correctly', () => {
+describe('isHex', () => {
+  it('accepts valid hex', () => {
     expect(isHex('deadbeef')).toBe(true);
     expect(isHex('0xDEADBEEF')).toBe(true);
     expect(isHex('de ad be ef')).toBe(true);
+  });
+
+  it('rejects invalid', () => {
     expect(isHex('xyz')).toBe(false);
     expect(isHex('')).toBe(false);
   });
+});
 
-  it('format formats bytes with linebreaks and spaces', () => {
+describe('format', () => {
+  it('groups bytes with a space and breaks lines', () => {
     const out = format('000102030405060708090a0b0c0d0e0f10', 4);
     expect(out).toBe('00 01 02 03\n04 05 06 07\n08 09 0a 0b\n0c 0d 0e 0f\n10');
   });

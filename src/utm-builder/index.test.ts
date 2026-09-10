@@ -66,17 +66,20 @@ describe('utm-builder', () => {
     expect(out).toContain('gclid=123');
   });
 
-  it('extractUtm extracts parameters', () => {
+  it('extractUtm extracts utm params from a URL', () => {
     const r = extractUtm('https://example.com/?utm_source=x&utm_medium=y&utm_campaign=z&utm_term=q');
     expect(r).toEqual({ source: 'x', medium: 'y', campaign: 'z', term: 'q', content: undefined });
   });
 
-  it('extractUtm returns null when required parameters are missing', () => {
+  it('extractUtm returns null when required params are missing', () => {
     expect(extractUtm('https://example.com/?utm_source=x')).toBeNull();
   });
 
-  it('hasUtm checks presence', () => {
+  it('hasUtm returns true when all required utm params exist', () => {
     expect(hasUtm('https://example.com/?utm_source=x&utm_medium=y&utm_campaign=z')).toBe(true);
+  });
+
+  it('hasUtm returns false when missing', () => {
     expect(hasUtm('https://example.com/?utm_source=x')).toBe(false);
   });
 });
