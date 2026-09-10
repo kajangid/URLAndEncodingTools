@@ -1,32 +1,29 @@
-import { defineConfig } from 'tsup';
-
-const entries = [
-  'src/index.ts',
-  'src/url-parser/index.ts',
-  'src/query-string/index.ts',
-  'src/url-validator/index.ts',
-  'src/utm-builder/index.ts',
-  'src/base64/index.ts',
-  'src/url-encoder/index.ts',
-  'src/html-encoder/index.ts',
-  'src/hex/index.ts',
-  'src/bin/cli.ts',
-];
+import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: entries,
-  format: ['esm', 'cjs'],
+  entry: {
+    index: "src/index.ts",
+    "url-parser/index": "src/url-parser/index.ts",
+    "query-string/index": "src/query-string/index.ts",
+    "url-validator/index": "src/url-validator/index.ts",
+    "utm-builder/index": "src/utm-builder/index.ts",
+    "base64/index": "src/base64/index.ts",
+    "url-encoder/index": "src/url-encoder/index.ts",
+    "html-encoder/index": "src/html-encoder/index.ts",
+    "hex/index": "src/hex/index.ts",
+    "bin/cli": "src/bin/cli.ts",
+  },
+  format: ["esm", "cjs"],
   dts: true,
-  sourcemap: true,
   clean: true,
-  target: 'es2022',
+  sourcemap: true,
   shims: true,
-  splitting: false,
-  treeshake: true,
-  minify: false,
+  banner: {
+    js: "/* @omnidev-tools/url-and-encoding */",
+  },
   outExtension({ format }) {
     return {
-      js: format === 'esm' ? '.mjs' : '.cjs',
+      js: format === "esm" ? ".mjs" : ".cjs",
     };
   },
 });
