@@ -9,17 +9,17 @@ Step-by-step release process, version bumping protocol, and CI/CD workflow for `
 Semantic Versioning (SemVer) is strictly enforced:
 
 ```bash
-# Bug fixes and security patches (0.1.0 -> 0.1.1)
+# Bug fixes and security patches (1.0.0 -> 1.0.1)
 npm run bump:patch
 
-# Backwards-compatible features and new utilities (0.1.0 -> 0.2.0)
+# Backwards-compatible features and new utilities (1.0.0 -> 1.1.0)
 npm run bump:minor
 
-# Breaking changes (0.1.0 -> 1.0.0)
+# Breaking changes (1.0.0 -> 2.0.0)
 npm run bump:major
 ```
 
-Each script runs `npm version` and automatically tags the git commit.
+Each script runs `npm version` and automatically tags the git commit. Because [`tsup.config.ts`](file:///D:/Projects/Utility%20Tool%20Package/URLAndEncodingTools/tsup.config.ts) and [`vitest.config.ts`](file:///D:/Projects/Utility%20Tool%20Package/URLAndEncodingTools/vitest.config.ts) inject `__PACKAGE_VERSION__` directly from [`package.json`](file:///D:/Projects/Utility%20Tool%20Package/URLAndEncodingTools/package.json), the version is automatically synchronized throughout [`src/version.ts`](file:///D:/Projects/Utility%20Tool%20Package/URLAndEncodingTools/src/version.ts), the library root exports, and the CLI executable—requiring zero manual code edits.
 
 ---
 

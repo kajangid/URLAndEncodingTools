@@ -63,6 +63,8 @@ src/
 ├── bin/                      # Standalone CLI binary and integration test suite
 │   ├── cli.ts                # Executable command runner & argument parser
 │   └── cli.test.ts           # CLI integration test suite
+├── version.ts                # Build-time package version resolver (__PACKAGE_VERSION__)
+├── version.test.ts           # Version resolution & SemVer integrity tests
 ├── index.ts                  # Root library entrypoint (namespaces + named exports)
 └── index.test.ts             # Root export integrity tests
 ```
@@ -124,3 +126,18 @@ We configure `tsup` to emit optimized, tree-shakable bundles:
 - **Sourcemaps**: Enabled for fast debugging and stack traces.
 - **Shims**: Enabled for cross-runtime CommonJS/ESM polyfilling (`import.meta.url`, `__dirname`).
 - **Subpath Exports**: Configured in `package.json` `"exports"` field, allowing consumers to import only what they need without loading unneeded tools.
+
+---
+
+## 5. Compile-Time Version Injection (Single Source of Truth)
+
+To ensure zero runtime file-system I/O when resolving the version string across both library exports and the CLI, the package employs compile-time definition injection:
+
+1. **Source of Truth**: `package.json`'s `"version"` field is the sole authoritative version string.
+2. **Bundler & Test Runner Injection**: Both `tsup.config.ts` and `vitest.config.ts` read `package.json` and declare `__PACKAGE_VERSION__`:
+   ```ts
+   define: {
+     __PACKAGE_VERSION__: JSON.stringify(pkg.version),
+   }
+   ```
+3. **Zero-Overhead Resolution**: [`src/version.ts`](file:///D:/Projects/Utility%20Tool%20Package/URLAndEncodingTools/src/version.ts) exports `VERSION`, resolved from `__PACKAGE_VERSION__` (with an untranspiled fallback). In compiled bundles, `tsup` inlines this directly as a literal string constant, eliminating runtime `fs` operations and JSON parsing in downstream applications.

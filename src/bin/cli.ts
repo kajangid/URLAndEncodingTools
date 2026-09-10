@@ -33,8 +33,8 @@ import {
   format as hexFormat,
   isHex,
 } from '../hex/index.js';
-
-export const VERSION = '1.0.0';
+import { VERSION } from '../version.js';
+export { VERSION };
 
 export interface ParsedArgs {
   positionals: string[];

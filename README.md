@@ -80,7 +80,8 @@ const hexStr = hex.encode('Hello World');
 const query = queryString.parse('filter=shoes&page=2');
 
 // Direct named imports
-import { parseUrl, validateUrl, escapeHtml } from '@omnidev-tools/url-and-encoding';
+import { parseUrl, validateUrl, escapeHtml, VERSION } from '@omnidev-tools/url-and-encoding';
+console.log(VERSION); // '1.0.0'
 ```
 
 ---

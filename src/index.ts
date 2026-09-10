@@ -62,3 +62,5 @@ export {
   safeSet,
   toSafeObject,
 } from './shared/security.js';
+
+export { VERSION } from './version.js';

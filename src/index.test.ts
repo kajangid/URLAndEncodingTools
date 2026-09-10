@@ -40,4 +40,9 @@ describe('Root entrypoint exports', () => {
     const hex = Root.hex.encode('hi');
     expect(hex).toBe('6869');
   });
+
+  it('exports VERSION matching semantic versioning', () => {
+    expect(typeof Root.VERSION).toBe('string');
+    expect(Root.VERSION).toMatch(/^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$/);
+  });
 });

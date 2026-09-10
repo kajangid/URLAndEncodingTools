@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseArgs, runCli, VERSION } from './cli.js';
+import { VERSION as ROOT_VERSION } from '../version.js';
 
 describe('CLI Args Parser', () => {
   it('parses commands, subcommands, and flags', () => {
@@ -23,6 +24,17 @@ describe('CLI Dispatcher & Exit Codes', () => {
     const res = await runCli({ positionals: [], flags: { version: true } });
     expect(res.exitCode).toBe(0);
     expect(res.stdout).toBe(VERSION);
+  });
+
+  it('returns version with -v short flag (code 0)', async () => {
+    const res = await runCli({ positionals: [], flags: { v: true } });
+    expect(res.exitCode).toBe(0);
+    expect(res.stdout).toBe(VERSION);
+  });
+
+  it('ensures cli VERSION matches root version.ts export', () => {
+    expect(VERSION).toBe(ROOT_VERSION);
+    expect(VERSION).toMatch(/^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$/);
   });
 
   it('returns help text with --help flag (code 0)', async () => {
