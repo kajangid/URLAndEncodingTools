@@ -18,6 +18,18 @@ Works out of the box in **Node.js (>= 18.0.0)**, **Modern Browsers**, **Deno**, 
 
 ---
 
+## Key Features
+
+- **Zero Runtime Dependencies**: Ultra-lightweight footprint implemented purely with native web and language standard APIs.
+- **Prototype Pollution Defenses**: Built-in immunity to `__proto__`, `constructor`, and `prototype` tampering using null-prototype safe dictionaries.
+- **Dual ESM & CommonJS Support**: First-class exports for ECMAScript Modules (`.mjs`) and CommonJS (`.cjs`), complete with `.d.ts` and `.d.cts` TypeScript declarations.
+- **Tree-Shakable Subpath Exports**: Granular subpaths (e.g., `@omnidev-tools/url-and-encoding/url-parser`) with `"sideEffects": false` for minimal bundle impact.
+- **Standalone CLI Toolkit & Aliases**: Full command-line interface (`url-tools`, `omnidev`) plus direct shortcuts (`url-parse`, `b64`, `hex-convert`, etc.) with stdin piping support.
+- **Cross-Runtime Compatibility**: Runs reliably across Node.js (>= 18.0.0), modern browsers, Deno, Bun, and Edge runtimes (Cloudflare Workers, Vercel Edge).
+- **Compile-Time Version Synchronization**: Automated build-time injection (`__PACKAGE_VERSION__`) ensuring a single source of truth from `package.json` with zero runtime I/O overhead.
+
+---
+
 ## Tools Overview
 
 | Tool                | Module Path                                     | CLI Command / Alias                        | Description                                                                              |
