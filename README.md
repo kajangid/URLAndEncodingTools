@@ -10,6 +10,7 @@
 [![Tests](https://img.shields.io/badge/Tests-101%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
+[![Coverage](https://img.shields.io/badge/coverage-96.3%25-brightgreen.svg)](docs/TESTING.md)
 
 A high-performance, **zero-runtime-dependency** TypeScript utility toolkit and standalone CLI for URL manipulation, query string parsing, validation, and encoding across all modern JavaScript environments.
 
