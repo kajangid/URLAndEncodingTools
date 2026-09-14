@@ -3,9 +3,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](tsconfig.json)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0-success.svg)](package.json)
 [![Module](https://img.shields.io/badge/Module-ESM%20%7C%20CJS-orange.svg)]()
-
-<!-- [![CI Status](https://img.shields.io/badge/CI-Passing-brightgreen.svg)]() -->
-
+[![CI](https://github.com/kajangid/URLAndEncodingTools/actions/workflows/ci.yml/badge.svg)](https://github.com/kajangid/URLAndEncodingTools/actions/workflows/ci.yml)
+[![Release](https://github.com/kajangid/URLAndEncodingTools/actions/workflows/release.yml/badge.svg)](https://github.com/kajangid/URLAndEncodingTools/actions/workflows/release.yml)
 [![NPM Version](https://img.shields.io/npm/v/@kjangid/url-encode-tools.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-101%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
