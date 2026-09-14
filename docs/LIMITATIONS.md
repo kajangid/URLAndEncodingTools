@@ -1,6 +1,6 @@
 # Limitations & Boundaries
 
-Understanding the operational boundaries, performance constraints, and security limits of `@omnidev-tools/url-and-encoding`.
+Understanding the operational boundaries, performance constraints, and security limits of `@kjangid/url-encode-tools`.
 
 ---
 

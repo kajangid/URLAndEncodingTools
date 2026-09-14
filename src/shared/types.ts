@@ -1,5 +1,5 @@
 /**
- * Universal primitive and generic types used across @omnidev-tools/url-and-encoding.
+ * Universal primitive and generic types used across @kjangid/url-encode-tools.
  */
 
 /**
@@ -40,4 +40,4 @@ export type ByteTransformer = (bytes: Uint8Array) => Uint8Array;
 /**
  * Recognized text and byte encoding formats.
  */
-export type EncodingFormat = 'utf-8' | 'hex' | 'base64' | 'base64url';
+export type EncodingFormat = "utf-8" | "hex" | "base64" | "base64url";

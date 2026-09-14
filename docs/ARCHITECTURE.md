@@ -1,6 +1,6 @@
 # Architecture & Design
 
-`@omnidev-tools/url-and-encoding` is designed as a zero-runtime-dependency, tree-shakable TypeScript toolkit providing URL manipulation, validation, and encoding utilities for modern JavaScript runtimes.
+`@kjangid/url-encode-tools` is designed as a zero-runtime-dependency, tree-shakable TypeScript toolkit providing URL manipulation, validation, and encoding utilities for modern JavaScript runtimes.
 
 ---
 
@@ -74,6 +74,7 @@ src/
 ## 3. Data Flow & Execution Pipeline
 
 ### Library Pipeline
+
 ```
 [User Application]
        │
@@ -95,6 +96,7 @@ src/
 ```
 
 ### CLI Execution Pipeline
+
 ```
 [User Terminal / Shell]
        │

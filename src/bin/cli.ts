@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { parseUrl } from '../url-parser/index.js';
-import { parse as parseQs, stringify as stringifyQs, ArrayFormat } from '../query-string/index.js';
-import { validate as validateUrl } from '../url-validator/index.js';
-import { buildUtm, extractUtm } from '../utm-builder/index.js';
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { parseUrl } from "../url-parser/index.js";
+import { parse as parseQs, stringify as stringifyQs, ArrayFormat } from "../query-string/index.js";
+import { validate as validateUrl } from "../url-validator/index.js";
+import { buildUtm, extractUtm } from "../utm-builder/index.js";
 import {
   encode as b64Encode,
   decode as b64Decode,
@@ -12,7 +12,7 @@ import {
   decodeUrl as b64DecodeUrl,
   isBase64,
   isBase64Url,
-} from '../base64/index.js';
+} from "../base64/index.js";
 import {
   encodeComponent,
   decodeComponent,
@@ -20,20 +20,10 @@ import {
   decodeFull,
   encodePath,
   encodeComponentKeep,
-} from '../url-encoder/index.js';
-import {
-  escapeHtml,
-  escapeAttribute,
-  unescapeHtml,
-  stripHtml,
-} from '../html-encoder/index.js';
-import {
-  encode as hexEncode,
-  decode as hexDecode,
-  format as hexFormat,
-  isHex,
-} from '../hex/index.js';
-import { VERSION } from '../version.js';
+} from "../url-encoder/index.js";
+import { escapeHtml, escapeAttribute, unescapeHtml, stripHtml } from "../html-encoder/index.js";
+import { encode as hexEncode, decode as hexDecode, format as hexFormat, isHex } from "../hex/index.js";
+import { VERSION } from "../version.js";
 export { VERSION };
 
 export interface ParsedArgs {
@@ -48,11 +38,11 @@ export interface CliResult {
 }
 
 export const HELP_TEXT = `
-@omnidev-tools/url-and-encoding CLI Toolkit
+@kjangid/url-encode-tools CLI Toolkit
 
 Usage:
   url-tools <command> [subcommand] [arguments...] [flags]
-  omnidev <command> [subcommand] [arguments...] [flags]
+  url-encode-tools <command> [subcommand] [arguments...] [flags]
 
 Dedicated Binary Aliases:
   url-parse      -> url-parser
@@ -119,32 +109,32 @@ export function parseArgs(rawArgs: string[]): ParsedArgs {
   while (i < rawArgs.length) {
     const arg = rawArgs[i]!;
 
-    if (arg === '--') {
+    if (arg === "--") {
       positionals.push(...rawArgs.slice(i + 1));
       break;
     }
 
-    if (arg.startsWith('--')) {
-      const eqIdx = arg.indexOf('=');
+    if (arg.startsWith("--")) {
+      const eqIdx = arg.indexOf("=");
       if (eqIdx !== -1) {
         flags[arg.slice(2, eqIdx)] = arg.slice(eqIdx + 1);
       } else {
         const key = arg.slice(2);
         const next = rawArgs[i + 1];
-        if (next && !next.startsWith('-')) {
+        if (next && !next.startsWith("-")) {
           flags[key] = next;
           i++;
         } else {
           flags[key] = true;
         }
       }
-    } else if (arg.startsWith('-') && arg.length > 1) {
+    } else if (arg.startsWith("-") && arg.length > 1) {
       const key = arg.slice(1);
-      if (key === 'h' || key === 'v') {
+      if (key === "h" || key === "v") {
         flags[key] = true;
       } else {
         const next = rawArgs[i + 1];
-        if (next && !next.startsWith('-')) {
+        if (next && !next.startsWith("-")) {
           flags[key] = next;
           i++;
         } else {
@@ -165,14 +155,14 @@ export function parseArgs(rawArgs: string[]): ParsedArgs {
  */
 export async function readStdin(timeoutMs = 1500): Promise<string> {
   return new Promise((resolve) => {
-    let data = '';
+    let data = "";
     let timer: NodeJS.Timeout | null = null;
 
     const cleanup = () => {
       if (timer) clearTimeout(timer);
-      process.stdin.removeListener('data', onData);
-      process.stdin.removeListener('end', onEnd);
-      process.stdin.removeListener('error', onError);
+      process.stdin.removeListener("data", onData);
+      process.stdin.removeListener("end", onEnd);
+      process.stdin.removeListener("error", onError);
     };
 
     const onData = (chunk: string | Buffer) => {
@@ -194,10 +184,10 @@ export async function readStdin(timeoutMs = 1500): Promise<string> {
       resolve(data);
     }, timeoutMs);
 
-    process.stdin.setEncoding('utf8');
-    process.stdin.on('data', onData);
-    process.stdin.on('end', onEnd);
-    process.stdin.on('error', onError);
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", onData);
+    process.stdin.on("end", onEnd);
+    process.stdin.on("error", onError);
 
     if (process.stdin.readableEnded) {
       cleanup();
@@ -210,12 +200,12 @@ export async function readStdin(timeoutMs = 1500): Promise<string> {
  * Resolves input from arguments, files, or stdin piping.
  */
 export async function resolveInput(positionalArg?: string): Promise<string> {
-  if (positionalArg !== undefined && positionalArg !== '') {
+  if (positionalArg !== undefined && positionalArg !== "") {
     try {
       if (fs.existsSync(positionalArg)) {
         const stat = fs.statSync(positionalArg);
         if (stat.isFile()) {
-          return fs.readFileSync(positionalArg, 'utf8');
+          return fs.readFileSync(positionalArg, "utf8");
         }
       }
     } catch {
@@ -227,11 +217,11 @@ export async function resolveInput(positionalArg?: string): Promise<string> {
   if (!process.stdin.isTTY && !process.env.VITEST) {
     const stdinContent = await readStdin();
     if (stdinContent.length > 0) {
-      return stdinContent.replace(/\r?\n$/, '');
+      return stdinContent.replace(/\r?\n$/, "");
     }
   }
 
-  return '';
+  return "";
 }
 
 /**
@@ -240,11 +230,11 @@ export async function resolveInput(positionalArg?: string): Promise<string> {
 export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise<CliResult> {
   const { flags } = args;
 
-  if (flags['help'] || flags['h']) {
+  if (flags["help"] || flags["h"]) {
     return { exitCode: 0, stdout: HELP_TEXT.trim() };
   }
 
-  if (flags['version'] || flags['v']) {
+  if (flags["version"] || flags["v"]) {
     return { exitCode: 0, stdout: VERSION };
   }
 
@@ -258,27 +248,27 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
   if (!cmd) {
     return {
       exitCode: 2,
-      stderr: 'Error: No command specified. Use --help to view available commands.',
+      stderr: "Error: No command specified. Use --help to view available commands.",
     };
   }
 
-  const normalizedCmd = cmd.toLowerCase().replace(/_/g, '-');
+  const normalizedCmd = cmd.toLowerCase().replace(/_/g, "-");
 
   switch (normalizedCmd) {
-    case 'url-parser':
-    case 'url-parse': {
+    case "url-parser":
+    case "url-parse": {
       const raw = await resolveInput(positionals[0]);
       if (!raw) {
-        return { exitCode: 2, stderr: 'Error: url-parser requires a URL input or piped stdin.' };
+        return { exitCode: 2, stderr: "Error: url-parser requires a URL input or piped stdin." };
       }
       try {
         const parsed = parseUrl(raw);
-        const field = flags['field'];
-        if (typeof field === 'string' && field in parsed) {
+        const field = flags["field"];
+        if (typeof field === "string" && field in parsed) {
           const val = (parsed as unknown as Record<string, unknown>)[field];
           return {
             exitCode: 0,
-            stdout: typeof val === 'object' ? JSON.stringify(val, null, 2) : String(val ?? ''),
+            stdout: typeof val === "object" ? JSON.stringify(val, null, 2) : String(val ?? ""),
           };
         }
         return { exitCode: 0, stdout: JSON.stringify(parsed, null, 2) };
@@ -287,51 +277,48 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
       }
     }
 
-    case 'query-string': {
+    case "query-string": {
       let sub = positionals[0];
       let inputArg = positionals[1];
-      if (sub !== 'parse' && sub !== 'stringify') {
+      if (sub !== "parse" && sub !== "stringify") {
         inputArg = sub;
-        sub = 'parse';
+        sub = "parse";
       }
       const raw = await resolveInput(inputArg);
-      const delimiter = typeof flags['delimiter'] === 'string' ? flags['delimiter'] : undefined;
+      const delimiter = typeof flags["delimiter"] === "string" ? flags["delimiter"] : undefined;
 
-      if (sub === 'parse') {
+      if (sub === "parse") {
         const res = parseQs(raw, { delimiter });
         return { exitCode: 0, stdout: JSON.stringify(res, null, 2) };
       } else {
         try {
           const parsedJson = JSON.parse(raw);
-          const arrayFormat = (flags['array-format'] as ArrayFormat) || 'none';
+          const arrayFormat = (flags["array-format"] as ArrayFormat) || "none";
           const out = stringifyQs(parsedJson, { delimiter, arrayFormat });
           return { exitCode: 0, stdout: out };
         } catch {
           return {
             exitCode: 2,
-            stderr: 'Error: query-string stringify requires valid JSON input representing an object.',
+            stderr: "Error: query-string stringify requires valid JSON input representing an object.",
           };
         }
       }
     }
 
-    case 'url-validator':
-    case 'url-validate': {
+    case "url-validator":
+    case "url-validate": {
       const raw = await resolveInput(positionals[0]);
       if (!raw) {
-        return { exitCode: 2, stderr: 'Error: url-validator requires a URL input or piped stdin.' };
+        return { exitCode: 2, stderr: "Error: url-validator requires a URL input or piped stdin." };
       }
-      const rejectLocalhost = Boolean(flags['reject-localhost']);
-      const protocols = typeof flags['protocols'] === 'string'
-        ? flags['protocols'].split(',').map((p) => p.trim())
-        : undefined;
-      const maxLength = typeof flags['max-length'] === 'string'
-        ? parseInt(flags['max-length'], 10)
-        : undefined;
+      const rejectLocalhost = Boolean(flags["reject-localhost"]);
+      const protocols =
+        typeof flags["protocols"] === "string" ? flags["protocols"].split(",").map((p) => p.trim()) : undefined;
+      const maxLength = typeof flags["max-length"] === "string" ? parseInt(flags["max-length"], 10) : undefined;
 
       const res = validateUrl(raw, { rejectLocalhost, protocols, maxLength });
 
-      if (flags['json']) {
+      if (flags["json"]) {
         return {
           exitCode: res.valid ? 0 : 1,
           stdout: JSON.stringify(res.valid ? { valid: true, href: res.url.href } : res, null, 2),
@@ -345,32 +332,39 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
       }
     }
 
-    case 'utm-builder':
-    case 'utm-build': {
+    case "utm-builder":
+    case "utm-build": {
       const raw = await resolveInput(positionals[0]);
       if (!raw) {
-        return { exitCode: 2, stderr: 'Error: utm-builder requires a base URL input.' };
+        return { exitCode: 2, stderr: "Error: utm-builder requires a base URL input." };
       }
 
-      if (flags['extract']) {
+      if (flags["extract"]) {
         const extracted = extractUtm(raw);
         if (!extracted) {
-          return { exitCode: 1, stderr: 'No UTM parameters found in URL.' };
+          return { exitCode: 1, stderr: "No UTM parameters found in URL." };
         }
         return { exitCode: 0, stdout: JSON.stringify(extracted, null, 2) };
       }
 
-      const source = flags['source'];
-      const medium = flags['medium'];
-      const campaign = flags['campaign'];
-      const term = flags['term'];
-      const content = flags['content'];
-      const lowercase = Boolean(flags['lowercase']);
+      const source = flags["source"];
+      const medium = flags["medium"];
+      const campaign = flags["campaign"];
+      const term = flags["term"];
+      const content = flags["content"];
+      const lowercase = Boolean(flags["lowercase"]);
 
-      if (!source || !medium || !campaign || typeof source !== 'string' || typeof medium !== 'string' || typeof campaign !== 'string') {
+      if (
+        !source ||
+        !medium ||
+        !campaign ||
+        typeof source !== "string" ||
+        typeof medium !== "string" ||
+        typeof campaign !== "string"
+      ) {
         return {
           exitCode: 2,
-          stderr: 'Error: --source, --medium, and --campaign flags are required to build UTM URL.',
+          stderr: "Error: --source, --medium, and --campaign flags are required to build UTM URL.",
         };
       }
 
@@ -381,8 +375,8 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
             source,
             medium,
             campaign,
-            term: typeof term === 'string' ? term : undefined,
-            content: typeof content === 'string' ? content : undefined,
+            term: typeof term === "string" ? term : undefined,
+            content: typeof content === "string" ? content : undefined,
           },
           { lowercase },
         );
@@ -392,60 +386,60 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
       }
     }
 
-    case 'base64':
-    case 'b64': {
+    case "base64":
+    case "b64": {
       let sub = positionals[0];
       let inputArg = positionals[1];
-      if (sub !== 'encode' && sub !== 'decode' && sub !== 'check') {
+      if (sub !== "encode" && sub !== "decode" && sub !== "check") {
         inputArg = sub;
-        sub = 'encode';
+        sub = "encode";
       }
       const raw = await resolveInput(inputArg);
-      const isUrlSafe = Boolean(flags['url']);
+      const isUrlSafe = Boolean(flags["url"]);
 
-      if (sub === 'encode') {
+      if (sub === "encode") {
         return { exitCode: 0, stdout: isUrlSafe ? b64EncodeUrl(raw) : b64Encode(raw) };
-      } else if (sub === 'decode') {
+      } else if (sub === "decode") {
         try {
           const out = isUrlSafe ? b64DecodeUrl(raw) : b64Decode(raw);
           return { exitCode: 0, stdout: out };
         } catch (err) {
           return { exitCode: 1, stderr: `Error: Invalid Base64 payload - ${(err as Error).message}` };
         }
-      } else if (sub === 'check') {
+      } else if (sub === "check") {
         const valid = isUrlSafe ? isBase64Url(raw) : isBase64(raw);
         return {
           exitCode: valid ? 0 : 1,
-          stdout: valid ? 'VALID' : 'INVALID',
+          stdout: valid ? "VALID" : "INVALID",
         };
       }
       return { exitCode: 2, stderr: `Unknown base64 action "${sub}"` };
     }
 
-    case 'url-encoder':
-    case 'url-encode': {
+    case "url-encoder":
+    case "url-encode": {
       let sub = positionals[0];
       let inputArg = positionals[1];
-      if (sub !== 'encode' && sub !== 'decode') {
+      if (sub !== "encode" && sub !== "decode") {
         inputArg = sub;
-        sub = 'encode';
+        sub = "encode";
       }
       const raw = await resolveInput(inputArg);
 
-      if (sub === 'encode') {
-        if (flags['full']) {
+      if (sub === "encode") {
+        if (flags["full"]) {
           return { exitCode: 0, stdout: encodeFull(raw) };
         }
-        if (flags['path']) {
+        if (flags["path"]) {
           return { exitCode: 0, stdout: encodePath(raw) };
         }
-        if (typeof flags['keep'] === 'string') {
-          return { exitCode: 0, stdout: encodeComponentKeep(raw, { keep: flags['keep'] }) };
+        if (typeof flags["keep"] === "string") {
+          return { exitCode: 0, stdout: encodeComponentKeep(raw, { keep: flags["keep"] }) };
         }
         return { exitCode: 0, stdout: encodeComponent(raw) };
       } else {
         try {
-          const out = flags['full'] ? decodeFull(raw) : decodeComponent(raw);
+          const out = flags["full"] ? decodeFull(raw) : decodeComponent(raw);
           return { exitCode: 0, stdout: out };
         } catch (err) {
           return { exitCode: 1, stderr: `Error: URI decode failed - ${(err as Error).message}` };
@@ -453,54 +447,52 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
       }
     }
 
-    case 'html-encoder':
-    case 'html-encode': {
+    case "html-encoder":
+    case "html-encode": {
       let sub = positionals[0];
       let inputArg = positionals[1];
-      if (sub !== 'escape' && sub !== 'unescape' && sub !== 'strip') {
+      if (sub !== "escape" && sub !== "unescape" && sub !== "strip") {
         inputArg = sub;
-        sub = 'escape';
+        sub = "escape";
       }
       const raw = await resolveInput(inputArg);
 
-      if (sub === 'escape') {
-        return { exitCode: 0, stdout: flags['attr'] ? escapeAttribute(raw) : escapeHtml(raw) };
-      } else if (sub === 'unescape') {
+      if (sub === "escape") {
+        return { exitCode: 0, stdout: flags["attr"] ? escapeAttribute(raw) : escapeHtml(raw) };
+      } else if (sub === "unescape") {
         return { exitCode: 0, stdout: unescapeHtml(raw) };
-      } else if (sub === 'strip') {
+      } else if (sub === "strip") {
         return { exitCode: 0, stdout: stripHtml(raw) };
       }
       return { exitCode: 2, stderr: `Unknown html-encoder action "${sub}"` };
     }
 
-    case 'hex':
-    case 'hex-convert': {
+    case "hex":
+    case "hex-convert": {
       let sub = positionals[0];
       let inputArg = positionals[1];
-      if (sub !== 'encode' && sub !== 'decode' && sub !== 'format' && sub !== 'check') {
+      if (sub !== "encode" && sub !== "decode" && sub !== "format" && sub !== "check") {
         inputArg = sub;
-        sub = 'encode';
+        sub = "encode";
       }
       const raw = await resolveInput(inputArg);
 
-      if (sub === 'encode') {
+      if (sub === "encode") {
         return { exitCode: 0, stdout: hexEncode(raw) };
-      } else if (sub === 'decode') {
+      } else if (sub === "decode") {
         try {
           return { exitCode: 0, stdout: hexDecode(raw) };
         } catch (err) {
           return { exitCode: 1, stderr: `Error: Invalid hex input - ${(err as Error).message}` };
         }
-      } else if (sub === 'check') {
+      } else if (sub === "check") {
         const valid = isHex(raw);
         return {
           exitCode: valid ? 0 : 1,
-          stdout: valid ? 'VALID' : 'INVALID',
+          stdout: valid ? "VALID" : "INVALID",
         };
-      } else if (sub === 'format') {
-        const bytesPerLine = typeof flags['bytes-per-line'] === 'string'
-          ? parseInt(flags['bytes-per-line'], 10)
-          : 16;
+      } else if (sub === "format") {
+        const bytesPerLine = typeof flags["bytes-per-line"] === "string" ? parseInt(flags["bytes-per-line"], 10) : 16;
         return { exitCode: 0, stdout: hexFormat(raw, bytesPerLine) };
       }
       return { exitCode: 2, stderr: `Unknown hex action "${sub}"` };
@@ -515,25 +507,31 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
 }
 
 // Main execution entry when run directly in Node
-const rawBin = path.basename(process.argv[1] || '');
-const binName = rawBin.replace(/\.(c?js|cmd|ps1|sh)$/i, '');
+const rawBin = path.basename(process.argv[1] || "");
+const binName = rawBin.replace(/\.(c?js|cmd|ps1|sh)$/i, "");
 
 const ALIAS_MAP: Record<string, string> = {
-  'url-parse': 'url-parser',
-  'query-string': 'query-string',
-  'url-validate': 'url-validator',
-  'utm-build': 'utm-builder',
-  'b64': 'base64',
-  'url-encode': 'url-encoder',
-  'html-encode': 'html-encoder',
-  'hex-convert': 'hex',
+  "url-parse": "url-parser",
+  "query-string": "query-string",
+  "url-validate": "url-validator",
+  "utm-build": "utm-builder",
+  b64: "base64",
+  "url-encode": "url-encoder",
+  "html-encode": "html-encoder",
+  "hex-convert": "hex",
 };
 
 const defaultCmd = ALIAS_MAP[binName];
 const parsed = parseArgs(process.argv.slice(2));
 
 // Only run automatically if executed directly as a script
-if (process.argv[1] && (process.argv[1].endsWith('cli.cjs') || process.argv[1].endsWith('cli.mjs') || process.argv[1].endsWith('cli.ts') || process.argv[1].endsWith('cli.js'))) {
+if (
+  process.argv[1] &&
+  (process.argv[1].endsWith("cli.cjs") ||
+    process.argv[1].endsWith("cli.mjs") ||
+    process.argv[1].endsWith("cli.ts") ||
+    process.argv[1].endsWith("cli.js"))
+) {
   runCli(parsed, defaultCmd)
     .then((result) => {
       if (result.stdout) {

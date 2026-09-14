@@ -1,9 +1,7 @@
 import { readFileSync } from "node:fs";
 import { defineConfig } from "tsup";
 
-const pkg = JSON.parse(
-  readFileSync(new URL("./package.json", import.meta.url), "utf-8")
-);
+const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf-8"));
 
 export default defineConfig({
   entry: {
@@ -24,7 +22,7 @@ export default defineConfig({
   sourcemap: true,
   shims: true,
   banner: {
-    js: "/* @omnidev-tools/url-and-encoding */",
+    js: "/* @kjangid/url-encode-tools */",
   },
   define: {
     __PACKAGE_VERSION__: JSON.stringify(pkg.version),

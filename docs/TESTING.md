@@ -1,6 +1,6 @@
 # Testing Strategy & Verification
 
-`@omnidev-tools/url-and-encoding` maintains rigorous test-driven validation covering unit tests, security vector attacks, and CLI integration.
+`@kjangid/url-encode-tools` maintains rigorous test-driven validation covering unit tests, security vector attacks, and CLI integration.
 
 ---
 

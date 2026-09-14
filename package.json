@@ -1,25 +1,36 @@
 {
-  "name": "@omnidev-tools/url-and-encoding",
+  "name": "@kjangid/url-encode-tools",
   "version": "1.0.0",
   "description": "Production-grade, zero-runtime-dependency TypeScript URL manipulation, validation, encoding, and decoding toolkit with standalone CLI.",
-  "author": "OmniDev Tools",
+  "author": "Karan Jangid",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kajangid/URLAndEncodingTools.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/kajangid/URLAndEncodingTools/issues"
+  },
+  "homepage": "https://github.com/kajangid/URLAndEncodingTools#readme",
   "bin": {
-    "url-tools": "./dist/bin/cli.cjs",
-    "omnidev": "./dist/bin/cli.cjs",
-    "url-parse": "./dist/bin/cli.cjs",
-    "query-string": "./dist/bin/cli.cjs",
-    "url-validate": "./dist/bin/cli.cjs",
-    "utm-build": "./dist/bin/cli.cjs",
-    "b64": "./dist/bin/cli.cjs",
-    "url-encode": "./dist/bin/cli.cjs",
-    "html-encode": "./dist/bin/cli.cjs",
-    "hex-convert": "./dist/bin/cli.cjs"
+    "url-tools": "dist/bin/cli.cjs",
+    "url-encode-tools": "dist/bin/cli.cjs",
+    "url-parse": "dist/bin/cli.cjs",
+    "query-string": "dist/bin/cli.cjs",
+    "url-validate": "dist/bin/cli.cjs",
+    "utm-build": "dist/bin/cli.cjs",
+    "b64": "dist/bin/cli.cjs",
+    "url-encode": "dist/bin/cli.cjs",
+    "html-encode": "dist/bin/cli.cjs",
+    "hex-convert": "dist/bin/cli.cjs"
   },
   "exports": {
     ".": {

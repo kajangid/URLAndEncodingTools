@@ -1,4 +1,4 @@
-# @omnidev-tools/url-and-encoding
+# @kjangid/url-encode-tools
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](tsconfig.json)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0-success.svg)](package.json)
@@ -6,7 +6,7 @@
 
 <!-- [![CI Status](https://img.shields.io/badge/CI-Passing-brightgreen.svg)]() -->
 
-[![NPM Version](https://img.shields.io/npm/v/@omnidev-tools/url-and-encoding.svg)]()
+[![NPM Version](https://img.shields.io/npm/v/@kjangid/url-encode-tools.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-101%20passed-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](package.json)
@@ -23,8 +23,8 @@ Works out of the box in **Node.js (>= 18.0.0)**, **Modern Browsers**, **Deno**, 
 - **Zero Runtime Dependencies**: Ultra-lightweight footprint implemented purely with native web and language standard APIs.
 - **Prototype Pollution Defenses**: Built-in immunity to `__proto__`, `constructor`, and `prototype` tampering using null-prototype safe dictionaries.
 - **Dual ESM & CommonJS Support**: First-class exports for ECMAScript Modules (`.mjs`) and CommonJS (`.cjs`), complete with `.d.ts` and `.d.cts` TypeScript declarations.
-- **Tree-Shakable Subpath Exports**: Granular subpaths (e.g., `@omnidev-tools/url-and-encoding/url-parser`) with `"sideEffects": false` for minimal bundle impact.
-- **Standalone CLI Toolkit & Aliases**: Full command-line interface (`url-tools`, `omnidev`) plus direct shortcuts (`url-parse`, `b64`, `hex-convert`, etc.) with stdin piping support.
+- **Tree-Shakable Subpath Exports**: Granular subpaths (e.g., `@kjangid/url-encode-tools/url-parser`) with `"sideEffects": false` for minimal bundle impact.
+- **Standalone CLI Toolkit & Aliases**: Full command-line interface (`url-tools`, `url-encode-tools`) plus direct shortcuts (`url-parse`, `b64`, `hex-convert`, etc.) with stdin piping support.
 - **Cross-Runtime Compatibility**: Runs reliably across Node.js (>= 18.0.0), modern browsers, Deno, Bun, and Edge runtimes (Cloudflare Workers, Vercel Edge).
 - **Compile-Time Version Synchronization**: Automated build-time injection (`__PACKAGE_VERSION__`) ensuring a single source of truth from `package.json` with zero runtime I/O overhead.
 
@@ -32,16 +32,16 @@ Works out of the box in **Node.js (>= 18.0.0)**, **Modern Browsers**, **Deno**, 
 
 ## Tools Overview
 
-| Tool                | Module Path                                     | CLI Command / Alias                        | Description                                                                              |
-| :------------------ | :---------------------------------------------- | :----------------------------------------- | :--------------------------------------------------------------------------------------- |
-| **`url-parser`**    | `@omnidev-tools/url-and-encoding/url-parser`    | `url-tools url-parser` / `url-parse`       | Structured URL parsing conforming to WHATWG URL specifications.                          |
-| **`query-string`**  | `@omnidev-tools/url-and-encoding/query-string`  | `url-tools query-string` / `query-string`  | Build & parse query strings with nested objects, arrays, and prototype pollution guards. |
-| **`url-validator`** | `@omnidev-tools/url-and-encoding/url-validator` | `url-tools url-validator` / `url-validate` | Validate URLs with protocol allowlists, RFC host validation, and loopback detection.     |
-| **`utm-builder`**   | `@omnidev-tools/url-and-encoding/utm-builder`   | `url-tools utm-builder` / `utm-build`      | Append and extract campaign tracking parameters (`utm_source`, `utm_campaign`, etc.).    |
-| **`base64`**        | `@omnidev-tools/url-and-encoding/base64`        | `url-tools base64` / `b64`                 | UTF-8 safe Base64 and URL-safe Base64URL string and byte array conversions.              |
-| **`url-encoder`**   | `@omnidev-tools/url-and-encoding/url-encoder`   | `url-tools url-encoder` / `url-encode`     | RFC 3986 URI component, path, and full URL encoding with custom reserved keep-sets.      |
-| **`html-encoder`**  | `@omnidev-tools/url-and-encoding/html-encoder`  | `url-tools html-encoder` / `html-encode`   | Escape/unescape HTML text and attribute values, named/numeric entities, and strip tags.  |
-| **`hex`**           | `@omnidev-tools/url-and-encoding/hex`           | `url-tools hex` / `hex-convert`            | Text and byte array to hexadecimal conversion, formatting, and validation.               |
+| Tool                | Module Path                               | CLI Command / Alias                        | Description                                                                              |
+| :------------------ | :---------------------------------------- | :----------------------------------------- | :--------------------------------------------------------------------------------------- |
+| **`url-parser`**    | `@kjangid/url-encode-tools/url-parser`    | `url-tools url-parser` / `url-parse`       | Structured URL parsing conforming to WHATWG URL specifications.                          |
+| **`query-string`**  | `@kjangid/url-encode-tools/query-string`  | `url-tools query-string` / `query-string`  | Build & parse query strings with nested objects, arrays, and prototype pollution guards. |
+| **`url-validator`** | `@kjangid/url-encode-tools/url-validator` | `url-tools url-validator` / `url-validate` | Validate URLs with protocol allowlists, RFC host validation, and loopback detection.     |
+| **`utm-builder`**   | `@kjangid/url-encode-tools/utm-builder`   | `url-tools utm-builder` / `utm-build`      | Append and extract campaign tracking parameters (`utm_source`, `utm_campaign`, etc.).    |
+| **`base64`**        | `@kjangid/url-encode-tools/base64`        | `url-tools base64` / `b64`                 | UTF-8 safe Base64 and URL-safe Base64URL string and byte array conversions.              |
+| **`url-encoder`**   | `@kjangid/url-encode-tools/url-encoder`   | `url-tools url-encoder` / `url-encode`     | RFC 3986 URI component, path, and full URL encoding with custom reserved keep-sets.      |
+| **`html-encoder`**  | `@kjangid/url-encode-tools/html-encoder`  | `url-tools html-encoder` / `html-encode`   | Escape/unescape HTML text and attribute values, named/numeric entities, and strip tags.  |
+| **`hex`**           | `@kjangid/url-encode-tools/hex`           | `url-tools hex` / `hex-convert`            | Text and byte array to hexadecimal conversion, formatting, and validation.               |
 
 ---
 
@@ -49,22 +49,22 @@ Works out of the box in **Node.js (>= 18.0.0)**, **Modern Browsers**, **Deno**, 
 
 ```bash
 # npm
-npm install @omnidev-tools/url-and-encoding
+npm install @kjangid/url-encode-tools
 
 # pnpm
-pnpm add @omnidev-tools/url-and-encoding
+pnpm add @kjangid/url-encode-tools
 
 # yarn
-yarn add @omnidev-tools/url-and-encoding
+yarn add @kjangid/url-encode-tools
 
 # bun
-bun add @omnidev-tools/url-and-encoding
+bun add @kjangid/url-encode-tools
 ```
 
 Global CLI installation:
 
 ```bash
-npm install -g @omnidev-tools/url-and-encoding
+npm install -g @kjangid/url-encode-tools
 ```
 
 ---
@@ -74,10 +74,10 @@ npm install -g @omnidev-tools/url-and-encoding
 ### Subpath Imports (Recommended for Minimal Bundle Size)
 
 ```ts
-import { parseUrl } from "@omnidev-tools/url-and-encoding/url-parser";
-import { parse as parseQuery, stringify } from "@omnidev-tools/url-and-encoding/query-string";
-import { buildUtm } from "@omnidev-tools/url-and-encoding/utm-builder";
-import { encode as b64Encode } from "@omnidev-tools/url-and-encoding/base64";
+import { parseUrl } from "@kjangid/url-encode-tools/url-parser";
+import { parse as parseQuery, stringify } from "@kjangid/url-encode-tools/query-string";
+import { buildUtm } from "@kjangid/url-encode-tools/utm-builder";
+import { encode as b64Encode } from "@kjangid/url-encode-tools/base64";
 
 const url = parseUrl("https://example.com/api?user=alice");
 console.log(url.hostname); // 'example.com'
@@ -93,14 +93,14 @@ const campaign = buildUtm("https://example.com/shop", {
 
 ```ts
 // Namespaces
-import { base64, hex, queryString } from "@omnidev-tools/url-and-encoding";
+import { base64, hex, queryString } from "@kjangid/url-encode-tools";
 
 const encoded = base64.encode("Hello World");
 const hexStr = hex.encode("Hello World");
 const query = queryString.parse("filter=shoes&page=2");
 
 // Direct named imports
-import { parseUrl, validateUrl, escapeHtml, VERSION } from "@omnidev-tools/url-and-encoding";
+import { parseUrl, validateUrl, escapeHtml, VERSION } from "@kjangid/url-encode-tools";
 console.log(VERSION); // '1.0.0'
 ```
 
@@ -108,7 +108,7 @@ console.log(VERSION); // '1.0.0'
 
 ## Standalone CLI Toolkit
 
-The package includes both a unified CLI (`url-tools` / `omnidev`) and dedicated binary aliases for every tool.
+The package includes both a unified CLI (`url-tools` / `url-encode-tools`) and dedicated binary aliases for every tool.
 
 ### CLI Features
 
@@ -243,11 +243,62 @@ hex-convert format "000102030405060708090a0b0c0d0e0f10" --bytes-per-line 4
 | `npm run test:watch`     | `vitest`                                             | Run Vitest in interactive watch mode.                                                      |
 | `npm run test:coverage`  | `vitest run --coverage`                              | Generate V8 code coverage reports.                                                         |
 | `npm run typecheck`      | `tsc --noEmit`                                       | Strict TypeScript compiler validation.                                                     |
-| `npm run bump:patch`     | `npm version patch`                                  | Increment patch version (e.g. 0.1.0 -> 0.1.1).                                             |
-| `npm run bump:minor`     | `npm version minor`                                  | Increment minor version (e.g. 0.1.0 -> 0.2.0).                                             |
-| `npm run bump:major`     | `npm version major`                                  | Increment major version (e.g. 0.1.0 -> 1.0.0).                                             |
+| `npm run bump:patch`     | `npm version patch`                                  | Increment patch version (e.g. 1.0.0 -> 1.0.1).                                             |
+| `npm run bump:minor`     | `npm version minor`                                  | Increment minor version (e.g. 1.0.0 -> 1.1.0).                                             |
+| `npm run bump:major`     | `npm version major`                                  | Increment major version (e.g. 1.0.0 -> 2.0.0).                                             |
 | `npm run prepublishOnly` | `npm run typecheck && npm run test && npm run build` | Release gate verification.                                                                 |
 | `npm run publish:dry`    | `npm publish --dry-run`                              | Test npm packaging and review tarball output.                                              |
+
+---
+
+## Release & Publishing
+
+This repository uses a production-ready, automated CI/CD release pipeline powered by **GitHub Actions**, **Git tags**, and **npm Trusted Publishing (OIDC)**. No long-lived secret tokens (`NPM_TOKEN`) are required.
+
+### Release Flow
+
+Never manually edit `"version"` in `package.json`. Instead, use standard Semantic Versioning commands:
+
+```bash
+# 1. Bump version and create Git tag automatically (e.g. v1.0.1)
+npm version patch   # or minor | major
+
+# 2. Push commit and tag to GitHub
+git push --follow-tags
+```
+
+Once pushed, GitHub Actions automatically executes the release pipeline:
+
+```text
+npm version [patch|minor|major]
+       ↓
+git push --follow-tags
+       ↓
+GitHub tag v1.x.x
+       ↓
+GitHub Actions (.github/workflows/release.yml)
+       ↓
+npm ci → lint → test → build → verify tag version
+       ↓
+npm publish via OIDC (--provenance --access public)
+       ↓
+GitHub Release created automatically
+```
+
+### One-Time Setup: npm Trusted Publishing (OIDC)
+
+To allow GitHub Actions to publish to npmjs.com without managing an `NPM_TOKEN`:
+
+1. **Log in to [npmjs.com](https://www.npmjs.com/)**.
+2. **Configure Trusted Publishing**:
+   - **If the package already exists on npm**: Go to your package page $\rightarrow$ **Settings** $\rightarrow$ **Publishing Access** $\rightarrow$ **Add GitHub Actions Publisher**.
+   - **If publishing for the first time**: Go to **Profile Settings** $\rightarrow$ **Publishing** $\rightarrow$ **Add GitHub Publisher** (pending publisher for `@kjangid/url-encode-tools`).
+3. **Fill in Publisher Details**:
+   - **GitHub Organization or User**: `kajangid`
+   - **Repository**: `URLAndEncodingTools`
+   - **Workflow filename**: `release.yml`
+   - **Environment**: _(leave empty)_
+4. **Save**: Subsequent tag pushes matching `v*` will authenticate via short-lived cryptographic OIDC tokens minted by GitHub Actions and validated by npmjs.com.
 
 ---
 
@@ -266,4 +317,4 @@ For in-depth architectural and operational guides, refer to the documentation in
 
 ## License
 
-[MIT](LICENSE) © OmniDev Tools Team
+[MIT](LICENSE) © Karan Jangid Tools Team
