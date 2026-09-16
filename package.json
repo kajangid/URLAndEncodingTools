@@ -1,6 +1,6 @@
 {
   "name": "@kjangid/url-encode-tools",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Production-grade, zero-runtime-dependency TypeScript URL manipulation, validation, encoding, and decoding toolkit with standalone CLI.",
   "author": "Karan Jangid",
   "license": "MIT",
