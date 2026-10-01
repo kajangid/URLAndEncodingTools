@@ -30,7 +30,8 @@
     "b64": "dist/bin/cli.cjs",
     "url-encode": "dist/bin/cli.cjs",
     "html-encode": "dist/bin/cli.cjs",
-    "hex-convert": "dist/bin/cli.cjs"
+    "hex-convert": "dist/bin/cli.cjs",
+    "url-extract": "dist/bin/cli.cjs"
   },
   "exports": {
     ".": {
@@ -77,6 +78,11 @@
       "types": "./dist/hex/index.d.ts",
       "import": "./dist/hex/index.mjs",
       "require": "./dist/hex/index.cjs"
+    },
+    "./url-extract": {
+      "types": "./dist/url-extract/index.d.ts",
+      "import": "./dist/url-extract/index.mjs",
+      "require": "./dist/url-extract/index.cjs"
     },
     "./package.json": "./package.json"
   },

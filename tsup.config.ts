@@ -14,6 +14,7 @@ export default defineConfig({
     "url-encoder/index": "src/url-encoder/index.ts",
     "html-encoder/index": "src/html-encoder/index.ts",
     "hex/index": "src/hex/index.ts",
+    "url-extract/index": "src/url-extract/index.ts",
     "bin/cli": "src/bin/cli.ts",
   },
   format: ["esm", "cjs"],

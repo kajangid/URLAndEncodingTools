@@ -60,6 +60,9 @@ src/
 ├── hex/                      # Hexadecimal byte & string manipulation
 │   ├── index.ts
 │   └── index.test.ts
+├── url-extract/              # URL extraction from arbitrary text
+│   ├── index.ts
+│   └── index.test.ts
 ├── bin/                      # Standalone CLI binary and integration test suite
 │   ├── cli.ts                # Executable command runner & argument parser
 │   └── cli.test.ts           # CLI integration test suite

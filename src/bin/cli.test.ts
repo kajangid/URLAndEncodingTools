@@ -313,5 +313,35 @@ describe("CLI Dispatcher & Exit Codes", () => {
       expect(res.exitCode).toBe(0);
       expect(res.stdout).toBe("4869");
     });
+
+    it('routes alias "url-extract" to url-extract tool', async () => {
+      const res = await runCli(
+        { positionals: ["visit https://example.com/a and https://example.com/b"], flags: {} },
+        "url-extract",
+      );
+      expect(res.exitCode).toBe(0);
+      expect(res.stdout).toBe("https://example.com/a\nhttps://example.com/b");
+    });
+  });
+
+  // Tool: url-extract
+  describe("url-extract command", () => {
+    it("extracts urls from text input", async () => {
+      const res = await runCli({
+        positionals: ["url-extract", "See https://example.com/test."],
+        flags: {},
+      });
+      expect(res.exitCode).toBe(0);
+      expect(res.stdout).toBe("https://example.com/test");
+    });
+
+    it("supports --json flag", async () => {
+      const res = await runCli({
+        positionals: ["url-extract", "Links: https://a.com, https://b.com"],
+        flags: { json: true },
+      });
+      expect(res.exitCode).toBe(0);
+      expect(JSON.parse(res.stdout!)).toEqual(["https://a.com", "https://b.com"]);
+    });
   });
 });

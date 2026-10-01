@@ -23,6 +23,7 @@ import {
 } from "../url-encoder/index.js";
 import { escapeHtml, escapeAttribute, unescapeHtml, stripHtml } from "../html-encoder/index.js";
 import { encode as hexEncode, decode as hexDecode, format as hexFormat, isHex } from "../hex/index.js";
+import { extractUrls } from "../url-extract/index.js";
 import { VERSION } from "../version.js";
 export { VERSION };
 
@@ -53,6 +54,7 @@ Dedicated Binary Aliases:
   url-encode     -> url-encoder
   html-encode    -> html-encoder
   hex-convert    -> hex
+  url-extract    -> url-extract
 
 Commands:
   url-parser <url>
@@ -92,6 +94,13 @@ Commands:
 
   hex <encode|decode|format|check> [input]
       --bytes-per-line <n>    Format output grouping bytes (default: 16)
+
+  url-extract [input]
+      --no-www                Do not match www.* without protocol
+      --no-dedupe             Do not deduplicate extracted URLs
+      --normalize             Normalize extracted URLs via WHATWG URL
+      --protocols <list>      Comma-separated allowed protocols (default: http,https)
+      --json                  Output extracted URLs as formatted JSON array
 
 General Flags:
   -h, --help                  Show this help message
@@ -498,6 +507,29 @@ export async function runCli(args: ParsedArgs, defaultCommand?: string): Promise
       return { exitCode: 2, stderr: `Unknown hex action "${sub}"` };
     }
 
+    case "url-extract": {
+      const inputArg = positionals[0];
+      const raw = await resolveInput(inputArg);
+      const allowWww = flags["www"] !== false && !flags["no-www"];
+      const unique = flags["dedupe"] !== false && !flags["no-dedupe"];
+      const normalize = Boolean(flags["normalize"]);
+      const protocols = typeof flags["protocols"] === "string"
+        ? flags["protocols"].split(",").map((s) => s.trim().toLowerCase())
+        : undefined;
+
+      const urls = extractUrls(raw, {
+        allowWww,
+        unique,
+        normalize,
+        protocols,
+      });
+
+      if (flags["json"]) {
+        return { exitCode: 0, stdout: JSON.stringify(urls, null, 2) };
+      }
+      return { exitCode: 0, stdout: urls.join("\n") };
+    }
+
     default:
       return {
         exitCode: 2,
@@ -519,6 +551,7 @@ const ALIAS_MAP: Record<string, string> = {
   "url-encode": "url-encoder",
   "html-encode": "html-encoder",
   "hex-convert": "hex",
+  "url-extract": "url-extract",
 };
 
 const defaultCmd = ALIAS_MAP[binName];

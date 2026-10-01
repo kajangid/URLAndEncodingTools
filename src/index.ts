@@ -14,6 +14,7 @@ export * as base64 from "./base64/index.js";
 export * as urlEncoder from "./url-encoder/index.js";
 export * as htmlEncoder from "./html-encoder/index.js";
 export * as hex from "./hex/index.js";
+export * as urlExtract from "./url-extract/index.js";
 export * as security from "./shared/security.js";
 export * from "./shared/types.js";
 
@@ -49,6 +50,9 @@ export {
 export type { EncodeOptions } from "./url-encoder/index.js";
 
 export { escapeHtml, escapeAttribute, unescapeHtml, stripHtml } from "./html-encoder/index.js";
+
+export { extractUrls, hasUrls } from "./url-extract/index.js";
+export type { ExtractOptions } from "./url-extract/index.js";
 
 export { isPrototypePollutionKey, createSafeObject, safeHasOwn, safeSet, toSafeObject } from "./shared/security.js";
 

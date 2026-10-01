@@ -11,6 +11,7 @@ describe('Root entrypoint exports', () => {
     expect(Root.urlEncoder).toBeDefined();
     expect(Root.htmlEncoder).toBeDefined();
     expect(Root.hex).toBeDefined();
+    expect(Root.urlExtract).toBeDefined();
     expect(Root.security).toBeDefined();
   });
 
@@ -26,6 +27,8 @@ describe('Root entrypoint exports', () => {
     expect(typeof Root.unescapeHtml).toBe('function');
     expect(typeof Root.encodeComponent).toBe('function');
     expect(typeof Root.decodeComponent).toBe('function');
+    expect(typeof Root.extractUrls).toBe('function');
+    expect(typeof Root.hasUrls).toBe('function');
     expect(typeof Root.createSafeObject).toBe('function');
   });
 
@@ -39,6 +42,10 @@ describe('Root entrypoint exports', () => {
 
     const hex = Root.hex.encode('hi');
     expect(hex).toBe('6869');
+
+    const extracted = Root.extractUrls('see https://example.com');
+    const fromNs = Root.urlExtract.extractUrls('see https://example.com');
+    expect(extracted).toEqual(fromNs);
   });
 
   it('exports VERSION matching semantic versioning', () => {

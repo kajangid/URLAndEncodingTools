@@ -252,3 +252,36 @@ decodeBytes("0xdeadbeef"); // Uint8Array([0xde, 0xad, 0xbe, 0xef])
 format("000102030405060708090a0b0c0d0e0f10", 4);
 // '00 01 02 03\n04 05 06 07\n08 09 0a 0b\n0c 0d 0e 0f\n10'
 ```
+
+---
+
+## 9. `url-extract`
+
+Extract URLs from arbitrary text with trailing punctuation trimming, balanced parenthesis handling, and WHATWG URL validation.
+
+### Import
+
+```ts
+import { extractUrls, hasUrls, type ExtractOptions } from "@kjangid/url-encode-tools/url-extract";
+```
+
+### Signatures
+
+```ts
+function extractUrls(text: string, options?: ExtractOptions): string[];
+function hasUrls(text: string, options?: ExtractOptions): boolean;
+```
+
+### Example
+
+```ts
+const text = "Check out https://github.com/trending, or visit www.google.com! (See also ftp://files.net/a.zip).";
+
+extractUrls(text);
+// ['https://github.com/trending', 'https://www.google.com']
+
+extractUrls(text, { protocols: ['https', 'ftp'] });
+// ['https://github.com/trending', 'https://www.google.com', 'ftp://files.net/a.zip']
+
+hasUrls(text); // true
+```

@@ -41,6 +41,7 @@ Works out of the box in **Node.js (>= 18.0.0)**, **Modern Browsers**, **Deno**, 
 | **`url-encoder`**   | `@kjangid/url-encode-tools/url-encoder`   | `url-tools url-encoder` / `url-encode`     | RFC 3986 URI component, path, and full URL encoding with custom reserved keep-sets.      |
 | **`html-encoder`**  | `@kjangid/url-encode-tools/html-encoder`  | `url-tools html-encoder` / `html-encode`   | Escape/unescape HTML text and attribute values, named/numeric entities, and strip tags.  |
 | **`hex`**           | `@kjangid/url-encode-tools/hex`           | `url-tools hex` / `hex-convert`            | Text and byte array to hexadecimal conversion, formatting, and validation.               |
+| **`url-extract`**   | `@kjangid/url-encode-tools/url-extract`   | `url-tools url-extract` / `url-extract`    | Extract URLs from arbitrary text with trailing punctuation trimming and WHATWG validation. |
 
 ---
 
@@ -77,9 +78,13 @@ import { parseUrl } from "@kjangid/url-encode-tools/url-parser";
 import { parse as parseQuery, stringify } from "@kjangid/url-encode-tools/query-string";
 import { buildUtm } from "@kjangid/url-encode-tools/utm-builder";
 import { encode as b64Encode } from "@kjangid/url-encode-tools/base64";
+import { extractUrls } from "@kjangid/url-encode-tools/url-extract";
 
 const url = parseUrl("https://example.com/api?user=alice");
 console.log(url.hostname); // 'example.com'
+
+const links = extractUrls("Review docs at https://docs.example.com and www.example.com.");
+console.log(links); // ['https://docs.example.com', 'https://www.example.com']
 
 const campaign = buildUtm("https://example.com/shop", {
   source: "twitter",
@@ -221,6 +226,16 @@ hex-convert encode "Hello"
 
 # Format hex view
 hex-convert format "000102030405060708090a0b0c0d0e0f10" --bytes-per-line 4
+```
+
+#### 9. URL Extractor
+
+```bash
+# Extract URLs from text
+url-extract "Check out https://github.com and www.google.com for info."
+
+# Output as JSON
+url-tools url-extract "Log file: https://api.site.com/v1" --json
 ```
 
 ---
