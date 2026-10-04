@@ -89,6 +89,7 @@
   "files": [
     "dist",
     "README.md",
+    "CONTRIBUTING.md",
     "LICENSE",
     "docs"
   ],
